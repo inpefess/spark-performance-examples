@@ -16,8 +16,8 @@ and it is known that using a Python UDF with DataFrames leads to the same shortc
 ## How to use this code
 1. get the YELP dataset [here](https://www.yelp.com/dataset_challenge/dataset)
 1. extract the archive into a `$DATA_DIR` folder and define respective environment variable
-1. run `spark_performance_examples/prepare_text.py` script (and yes, I use Python 3 for this project)
-1. run `py.test --duration=3` in `spark_performance_examples` directory to see PySpark timings
+1. run `pyspark_performance_examples/prepare_text.py` script (and yes, I use Python 3 for this project)
+1. run `py.test --duration=3` in `pyspark_performance_examples` directory to see PySpark timings
 1. run `sbt test` to see Scala timings
 
 You can also use Idea/PyCharm or your favourite IDE/text editor for running these UnitTests.
