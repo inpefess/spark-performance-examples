@@ -58,3 +58,25 @@ class TestWordCount(TestCase):
             .groupBy("col") \
             .agg(count("col")) \
             .write.csv(self.output_path)
+
+    def test_python_udf(self):
+        # but if one even uses DataFrames but also some Python UDFs
+        # then one loses all the gain from using DataFrames
+        self.spark.read \
+            .text(self.input_path) \
+            .selectExpr("explode(pythonSplit(value))") \
+            .groupBy("col") \
+            .agg(count("col")) \
+            .write.mode("overwrite") \
+            .csv(self.output_path)
+
+    def test_java_udf(self):
+        # using Java (or Scala) UDFs with DataFrames preserves
+        # performance benefits of using DataFrames
+        self.spark.read \
+            .text(self.input_path) \
+            .selectExpr("explode(scalaSplit(value))") \
+            .groupBy("col") \
+            .agg(count("col")) \
+            .write.mode("overwrite") \
+            .csv(self.output_path)

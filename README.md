@@ -6,18 +6,14 @@ For the source of an underlying corpus I have chosen reviews from [YELP dataset]
 * RDD.groupByKey in Python and Scala
 * RDD.reduceByKey in Python and Scala
 * DataFrame with built-in SparkSQL functions in Python and Scala
-
-## What I want to do next
-Python UDFs vs Java UDFs in PySpark.
-
-In Spark 2.1 there is an option to [register Java UDFs](https://issues.apache.org/jira/browse/SPARK-11775)
-and it is known that using a Python UDF with DataFrames leads to the same shortcomings as when using RDDs in PySpark.
+* DataFrame with Python and Java UDFs in PySpark 
 
 ## How to use this code
 1. get the YELP dataset [here](https://www.yelp.com/dataset_challenge/dataset)
 1. extract the archive into a `$DATA_DIR` folder and define respective environment variable
+1. run `sbt package` to create a JAR file with Scala UDF
 1. run `pyspark_performance_examples/prepare_text.py` script (and yes, I use Python 3 for this project)
-1. run `py.test --duration=3` in `pyspark_performance_examples` directory to see PySpark timings
+1. run `py.test --duration=5` in `pyspark_performance_examples` directory to see PySpark timings
 1. run `sbt test` to see Scala timings
 
 You can also use Idea/PyCharm or your favourite IDE/text editor for running these UnitTests.
