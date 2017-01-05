@@ -1,11 +1,10 @@
-import java.io.{File, FileInputStream}
+import java.io.FileInputStream
 import java.util.Properties
 
-import org.apache.commons.io.FileUtils
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, count, explode, split}
+import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.scalatest.FunSuite
 
 import scala.collection.JavaConverters.propertiesAsScalaMapConverter
@@ -16,8 +15,6 @@ class WordCountTest extends FunSuite {
 
   // this is a so called 'fixture' - a functional way to do setUp with side-effects for UnitTests
   private def spark = {
-    // every test will create this directory so we drop it beforehand
-    FileUtils.deleteDirectory(new File(outputDir))
     // for the purpose of these tests one doesn't want to see verbose logs
     Logger.getLogger("org").setLevel(Level.ERROR)
     Logger.getLogger("akka").setLevel(Level.ERROR)
@@ -64,6 +61,7 @@ class WordCountTest extends FunSuite {
       .select(explode(split(col("value"), " ")))
       .groupBy("col")
       .agg(count("col"))
-      .write.csv(outputDir)
+      .write.mode(SaveMode.Overwrite)
+      .csv(outputDir)
   }
 }
