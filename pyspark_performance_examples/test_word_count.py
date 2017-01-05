@@ -30,7 +30,7 @@ class TestWordCount(TestCase):
         # we have a separate SparkSession for every test
         self.spark.stop()
 
-    def test_rdd_group_by_key_wordcount(self):
+    def test_rdd_group_by_key(self):
         # using groupByKey is usually considered the worst style
         self.spark.sparkContext \
             .textFile(self.input_path) \
@@ -50,7 +50,7 @@ class TestWordCount(TestCase):
             .reduceByKey(lambda x, y: x + y) \
             .saveAsTextFile(self.output_path)
 
-    def test_data_frame_wordcount(self):
+    def test_dataframe(self):
         # and the best decision for PySpark is using DataFrames over RDDs
         self.spark.read \
             .text(self.input_path) \
