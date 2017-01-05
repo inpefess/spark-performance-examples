@@ -1,4 +1,5 @@
-import java.io.File
+import java.io.{File, FileInputStream}
+import java.util.Properties
 
 import org.apache.commons.io.FileUtils
 import org.apache.log4j.{Level, Logger}
@@ -6,6 +7,8 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, count, explode, split}
 import org.scalatest.FunSuite
+
+import scala.collection.JavaConverters.propertiesAsScalaMapConverter
 
 class WordCountTest extends FunSuite {
   private val inputDir = System.getenv("DATA_DIR") + "/text.txt"
@@ -18,13 +21,10 @@ class WordCountTest extends FunSuite {
     // for the purpose of these tests one doesn't want to see verbose logs
     Logger.getLogger("org").setLevel(Level.ERROR)
     Logger.getLogger("akka").setLevel(Level.ERROR)
-    // this configuration could be changed for a cluster
-    val sparkConf = new SparkConf()
-      .setMaster("local[*]")
-      .set("spark.sql.shuffle.partitions", "12")
-    val spark = SparkSession.builder
-      .config(conf = sparkConf)
-      .getOrCreate()
+    val prop = new Properties
+    prop.load(new FileInputStream("src/spark.properties"))
+    val sparkConf = new SparkConf().setAll(prop.asScala)
+    val spark = SparkSession.builder.config(conf = sparkConf).getOrCreate()
     spark
   }
 
